@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>631605791141-kkriiddopi1iv8un9argkkb90ch1pvnp.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.631605791141-kkriiddopi1iv8un9argkkb90ch1pvnp</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDBb7tlEGk5-l4idlmavxxZeYQRIzrHpOo</string>
+	<key>GCM_SENDER_ID</key>
+	<string>631605791141</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.edgmems.point</string>
+	<key>PROJECT_ID</key>
+	<string>point-70aaa</string>
+	<key>STORAGE_BUCKET</key>
+	<string>point-70aaa.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false/>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false/>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true/>
+	<key>IS_GCM_ENABLED</key>
+	<true/>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true/>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:631605791141:ios:1a8fb836db15c81e79804c</string>
+	<key>DATABASE_URL</key>
+	<string>https://point-70aaa-default-rtdb.firebaseio.com</string>
+</dict>
+</plist>
