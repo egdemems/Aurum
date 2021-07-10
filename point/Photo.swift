@@ -4,6 +4,8 @@
 //
 //  Created by Harrison Sherwood on 7/8/21.
 //
+//Copyright 2021
+//
 
 import SwiftUI
 import PhotosUI
