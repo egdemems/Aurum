@@ -19,7 +19,7 @@ struct PostSubView: View {
     
     var name: String
     
-    @State var postCount1 = 0
+    @State var postCount1 = true
     
     @State var thumbnail1 = [UIImage]()
     
@@ -31,23 +31,28 @@ struct PostSubView: View {
         ref.child("\(name)/image_count").getData {
             (error, snapshot) in
             let pop = snapshot.value as? Int
-            self.postCount1 = pop!
             if pop! != 0 {
-                for x in 1...pop! {
-                    ref.child("\(name)/image_\(x)").observe(.value) {
-                        (snapshot) in
-                        let pop1 = snapshot.value as? String
-                        Storage.storage().reference().child("\(pop1!)").getData(maxSize: 1 * 10000 * 10000) {
-                        (imageData, err) in
-                        if err != nil {
-                              print("error downloading image")
-                          } else {
-                              if let imageData = imageData {
-                                self.thumbnail1.append(UIImage(data: imageData)!)
+                if pop == 1 {
+                    postCount1 = true
+                }
+                else {
+                    postCount1 = false
+                    for x in 2...pop! {
+                        ref.child("\(name)/image_\(x)").observe(.value) {
+                            (snapshot) in
+                            let pop1 = snapshot.value as? String
+                            Storage.storage().reference().child("\(pop1!)").getData(maxSize: 1 * 10000 * 10000) {
+                            (imageData, err) in
+                            if err != nil {
+                                  print("error downloading image")
                               } else {
-                                    print("couldn't unwrap")
+                                  if let imageData = imageData {
+                                    self.thumbnail1.append(UIImage(data: imageData)!)
+                                  } else {
+                                        print("couldn't unwrap")
+                                  }
                               }
-                          }
+                            }
                         }
                     }
                 }
@@ -73,13 +78,12 @@ struct PostSubView: View {
                         .frame(width: 350, alignment: .leading)
                         .foregroundColor(.black)
                         .padding()
-                    if postCount1 == 1 {
+                    if postCount1 == true {
                         Image(uiImage: firstPhoto)
                             .resizable()
                             .aspectRatio(contentMode: .fill)
-                            .frame(width: 350, height: 350, alignment: .center)
+                            .frame(width: 390, height: 390, alignment: .center)
                             .clipped()
-                            .cornerRadius(10)
                     }
                     else {
                         ScrollView(.horizontal, showsIndicators: false) {
@@ -87,21 +91,18 @@ struct PostSubView: View {
                                 Image(uiImage: firstPhoto)
                                     .resizable()
                                     .aspectRatio(contentMode: .fill)
-                                    .frame(width: 350, height: 350, alignment: .center)
+                                    .frame(width: 390, height: 390, alignment: .center)
                                     .clipped()
-                                    .cornerRadius(10)
                                 if thumbnail1 != [UIImage]() {
-                                    ForEach(thumbnail1.suffix(thumbnail1.count - 1), id: \.self) { thing in
+                                    ForEach(thumbnail1, id: \.self) { thing in
                                         Image(uiImage: thing)
                                             .resizable()
                                             .aspectRatio(contentMode: .fill)
-                                            .frame(width: 350, height: 350, alignment: .center)
+                                            .frame(width: 390, height: 390, alignment: .center)
                                             .clipped()
-                                            .cornerRadius(10)
                                     }
                                 }
                             }
-                            .padding()
                         }
                     }
                     VStack {

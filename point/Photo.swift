@@ -20,26 +20,16 @@ struct Photo: View {
     
     var ref = Database.database().reference()
     
-    @State var totalPosts = 0
-    
     @State var images: [UIImage] = []
     @State var picker = false
-    
-    @State var count =  0
     
     @State var description = ""
     
     @State var price = ""
     
-    @State private var scrollViewContentOffset = CGFloat(0)
+    @State var count = 0
     
-    func load() {
-        ref.child("\(wallet)/posts/count").observe(.value) {
-            (snapshot) in
-            let pop = snapshot.value as? Int
-            self.totalPosts = pop ?? 0
-        }
-    }
+    @State private var scrollViewContentOffset = CGFloat(0)
     
     init() {
         UITextView.appearance().backgroundColor = .clear
@@ -127,14 +117,12 @@ struct Photo: View {
                         if images.count < 7 {
                             if description != "" {
                                 if price != "" {
-                                    let newPost: Int = self.totalPosts + 1
-                                    ref.child("\(wallet)/posts/count").setValue(newPost)
-                                    totalPosts = newPost
-                                    self.count = 1
+                                    count = 1
+                                    let post1 = UUID()
                                     for x in images {
                                         if let imageData = x.jpegData(compressionQuality: 0.25) {
                                             let storage = Storage.storage()
-                                            storage.reference().child("\(wallet)/\(totalPosts)/\(count)").putData(imageData, metadata: nil) { (_, err) in
+                                            storage.reference().child("\(wallet)/\(post1)/\(count)").putData(imageData, metadata: nil) { (_, err) in
                                                 if err != nil {
                                                     print("an error occurred")
                                                     print(err ?? "")
@@ -145,11 +133,11 @@ struct Photo: View {
                                         } else {
                                             print("couldnt unwrap image to data")
                                         }
-                                        ref.child("\(wallet)/posts/post_\(totalPosts)/price").setValue(Int(price))
-                                        ref.child("\(wallet)/posts/post_\(totalPosts)/description").setValue(description)
-                                        ref.child("\(wallet)/posts/post_\(totalPosts)/image_\(count)").setValue("\(wallet)/\(totalPosts)/\(count)")
-                                        ref.child("\(wallet)/posts/post_\(totalPosts)/image_count").setValue(count)
-                                        self.count += 1
+                                        ref.child("\(wallet)/posts/\(post1)/price").setValue(Int(price))
+                                        ref.child("\(wallet)/posts/\(post1)/description").setValue(description)
+                                        ref.child("\(wallet)/posts/\(post1)/image_\(count)").setValue("\(wallet)/\(post1)/\(count)")
+                                        ref.child("\(wallet)/posts/\(post1)/image_count").setValue(count)
+                                        count += 1
                                     }
                                     images.removeAll()
                                     description = ""
@@ -190,7 +178,6 @@ struct Photo: View {
                         UIApplication.shared.endEditing()
                     }
             )
-            .onAppear{load()}
             .sheet(isPresented: $picker) {
                 ImagePicker(images: $images, picker: $picker)
             }
