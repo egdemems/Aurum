@@ -40,7 +40,7 @@ struct ContentView: View {
                      }
                     .tag(Tabs.tab1)
                     ZStack {
-                        Photo()
+                        PostView()
                         Rectangle()
                             .fill(Color.white)
                             .frame(width: 450, height: 200)

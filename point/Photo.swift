@@ -14,6 +14,8 @@ import FirebaseStorage
 
 struct Photo: View {
     
+    @AppStorage("showingPhoto") var showingPhoto:Bool = false
+    
     @AppStorage("wallet") var wallet:String = ""
     
     var ref = Database.database().reference()
@@ -76,7 +78,8 @@ struct Photo: View {
                         Text("")
                             .frame(width: 450, height: 100)
                     })
-                }.padding(.top, 30)
+                }
+                //.padding(.top, 30)
                 VStack {
                     Text("Description")
                         .font(.system(size: 20, design: .rounded))
@@ -151,6 +154,7 @@ struct Photo: View {
                                     images.removeAll()
                                     description = ""
                                     price = ""
+                                    self.showingPhoto = false
                                 }
                                 else {
                                     print("price = nil")
@@ -170,7 +174,7 @@ struct Photo: View {
                 }, label: {
                     Text("Post")
                         .font(.system(size: 30, design: .rounded))
-                        .frame(width: 300 , height: 20, alignment: .center)
+                        .frame(width: 350 , height: 20, alignment: .center)
                         .foregroundColor(.black)
                 })
                 .padding()
