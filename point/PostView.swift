@@ -23,9 +23,16 @@ struct PostView: View {
     
     @AppStorage("wallet") var wallet:String = ""
     
+    /*
+    @AppStorage("setter") var setter = 0 {
+        didSet {
+            loader()
+        }
+    }
+    */
     @State var thumbnail = [Post]()
     
-    @State var firstLoad = true
+    //@State var firstLoad = true
     
     var twoColumnGrid = [GridItem(.flexible()), GridItem(.flexible())]
     
@@ -33,14 +40,15 @@ struct PostView: View {
     
     func loader() {
         ref.child("\(wallet)/posts/count").getData {
-            (error, snapshot) in
+            (err, snapshot) in
             let pop = snapshot.value as? Int
-            self.postCount = pop!
-            if pop! != 0 {
-                if self.firstLoad == true{
+            if pop != self.thumbnail.count {
+                thumbnail = [Post]()
+                self.postCount = pop!
+                if pop! != 0 {
                     for x in 1...pop! {
-                        ref.child("\(wallet)/posts/post_\(x)/image_1").observe(.value) {
-                            (snapshot) in
+                        ref.child("\(wallet)/posts/post_\(x)/image_1").getData {
+                            (err, snapshot) in
                             let pop1 = snapshot.value as? String
                             Storage.storage().reference().child("\(pop1!)").getData(maxSize: 1 * 10000 * 10000) {
                             (imageData, err) in
@@ -56,7 +64,6 @@ struct PostView: View {
                             }
                         }
                     }
-                    self.firstLoad = false
                 }
             }
         }
@@ -110,11 +117,12 @@ struct PostView: View {
                             .progressViewStyle(CircularProgressViewStyle(tint: Color(red: 255 / 255, green: 158 / 255, blue: 0 / 255)))
                     }
                 }
+                .onAppear{
+                    loader()
+                }
                 .padding(.top, 1)
                 .sheet(isPresented: $showingPhoto) {
                     Photo()
-                }.onAppear{
-                    loader()
                 }
             }
     }
