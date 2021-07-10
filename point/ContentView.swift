@@ -28,12 +28,24 @@ struct ContentView: View {
         if wallet != "" {
             NavigationView {
                 TabView(selection: $tabSelection) {
-                    Text("Images")
+                    ZStack{
+                        Text("Images")
+                        Rectangle()
+                            .fill(Color.white)
+                            .frame(width: 450, height: 192)
+                            .position(x: 200, y: 700)
+                    }
                     .tabItem {
                        Image(systemName: "safari")
                      }
                     .tag(Tabs.tab1)
-                    Photo()
+                    ZStack {
+                        Photo()
+                        Rectangle()
+                            .fill(Color.white)
+                            .frame(width: 450, height: 200)
+                            .position(x: 200, y: 800)
+                    }
                     .navigationBarTitle("")
                     .navigationBarHidden(true)
                     .tabItem {
@@ -52,12 +64,24 @@ struct ContentView: View {
                        Image(systemName: "arrow.left.arrow.right")
                      }
                     .tag(Tabs.tab3)
-                    Text("List of messages and message creator")
+                    ZStack {
+                        Text("List of messages and message creator")
+                        Rectangle()
+                            .fill(Color.white)
+                            .frame(width: 450, height: 100)
+                            .position(x: 200, y: 650)
+                    }
                     .tabItem {
                        Image(systemName: "message")
                      }
                     .tag(Tabs.tab4)
-                    accountView()
+                    ZStack {
+                        accountView()
+                        Rectangle()
+                            .fill(Color.white)
+                            .frame(width: 450, height: 100)
+                            .position(x: 200, y: 650)
+                    }
                     .tabItem {
                        Image(systemName: "gearshape")
                      }
