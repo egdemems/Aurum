@@ -9,6 +9,12 @@ import SwiftUI
 import FirebaseStorage
 import FirebaseDatabase
 
+struct Post: Hashable {
+    var id = UUID()
+    var image: UIImage
+    var postNum: String
+}
+
 struct PostView: View {
     
     var ref = Database.database().reference()
@@ -17,7 +23,7 @@ struct PostView: View {
     
     @AppStorage("wallet") var wallet:String = ""
     
-    @State var thumbnail = [UIImage]()
+    @State var thumbnail = [Post]()
     
     @State var firstLoad = true
     
@@ -42,7 +48,7 @@ struct PostView: View {
                                   print("error downloading image")
                               } else {
                                   if let imageData = imageData {
-                                    self.thumbnail.append(UIImage(data: imageData)!)
+                                    self.thumbnail.append(Post(image: UIImage(data: imageData)!, postNum: "\(wallet)/posts/post_\(x)"))
                                   } else {
                                         print("couldn't unwrap")
                                   }
@@ -57,57 +63,60 @@ struct PostView: View {
     }
     
     var body: some View {
-        VStack{
-            Spacer()
-                .frame(height: 30)
-            Button(action: {self.showingPhoto = true}, label: {
-                Text("List and item")
-                    .font(.system(size: 30, design: .rounded))
-                    .frame(width: 350 , height: 20, alignment: .center)
-                    .foregroundColor(.black)
-            })
-            .padding()
-            .font(.system(size: 20, design: .rounded))
-            .background(Color(red: 255 / 255, green: 211 / 255, blue: 138 / 255))
-            .foregroundColor(.white)
-            .cornerRadius(30)
-            ScrollView {
+            VStack{
                 Spacer()
                     .frame(height: 30)
-                Text("Your Listings")
-                    .font(.system(size: 25, design: .rounded))
-                    .frame(width: 350 , height: 20, alignment: .leading)
-                    .foregroundColor(.black)
-                Spacer()
-                    .frame(height: 10)
-                if self.thumbnail.count == postCount {
-                    if thumbnail == [UIImage]() {
-                        Text("")
-                    }
-                    else {
-                        LazyVGrid(columns: twoColumnGrid) {
-                            ForEach(thumbnail, id: \.self) { image in
-                                Image(uiImage: image)
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fill)
-                                    .frame(width: 190, height: 190, alignment: .topLeading)
-                                    .clipped()
-                                    .cornerRadius(10)
+                Button(action: {self.showingPhoto = true}, label: {
+                    Text("List an item")
+                        .font(.system(size: 30, design: .rounded))
+                        .frame(width: 350 , height: 20, alignment: .center)
+                        .foregroundColor(.black)
+                })
+                .padding()
+                .font(.system(size: 20, design: .rounded))
+                .background(Color(red: 255 / 255, green: 211 / 255, blue: 138 / 255))
+                .foregroundColor(.white)
+                .cornerRadius(30)
+                ScrollView {
+                    Spacer()
+                        .frame(height: 30)
+                    Text("Your Listings")
+                        .font(.system(size: 25, design: .rounded))
+                        .frame(width: 350 , height: 20, alignment: .leading)
+                        .foregroundColor(.black)
+                    Spacer()
+                        .frame(height: 10)
+                    if self.thumbnail.count == postCount {
+                        if thumbnail == [Post]() {
+                            Text("")
+                        }
+                        else {
+                            LazyVGrid(columns: twoColumnGrid) {
+                                ForEach(thumbnail, id: \.self) { thing in
+                                    NavigationLink(destination: PostSubView(username: wallet, name: thing.postNum)) {
+                                        Image(uiImage: thing.image)
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fill)
+                                            .frame(width: 190, height: 190, alignment: .topLeading)
+                                            .clipped()
+                                            .cornerRadius(10)
+                                    }
+                                }
                             }
                         }
                     }
+                    else {
+                        ProgressView()
+                            .progressViewStyle(CircularProgressViewStyle(tint: Color(red: 255 / 255, green: 158 / 255, blue: 0 / 255)))
+                    }
                 }
-                else {
-                    ProgressView()
-                        .progressViewStyle(CircularProgressViewStyle(tint: Color(red: 255 / 255, green: 158 / 255, blue: 0 / 255)))
+                .padding(.top, 1)
+                .sheet(isPresented: $showingPhoto) {
+                    Photo()
+                }.onAppear{
+                    loader()
                 }
             }
-            .sheet(isPresented: $showingPhoto) {
-                Photo()
-            }.onAppear{
-                loader()
-            }
-        }
     }
 }
 
