@@ -15,6 +15,8 @@ struct PostSubView: View {
     
     var username: String
     
+    var firstPhoto: UIImage
+    
     var name: String
     
     @State var postCount1 = 0
@@ -71,21 +73,25 @@ struct PostSubView: View {
                         .frame(width: 350, alignment: .leading)
                         .foregroundColor(.black)
                         .padding()
-                    if self.thumbnail1.count == postCount1 {
-                        if postCount1 == 1 {
-                            ForEach(thumbnail1, id: \.self) { thing in
-                                Image(uiImage: thing)
+                    if postCount1 == 1 {
+                        Image(uiImage: firstPhoto)
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: 350, height: 350, alignment: .center)
+                            .clipped()
+                            .cornerRadius(10)
+                    }
+                    else {
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            LazyHStack {
+                                Image(uiImage: firstPhoto)
                                     .resizable()
                                     .aspectRatio(contentMode: .fill)
                                     .frame(width: 350, height: 350, alignment: .center)
                                     .clipped()
                                     .cornerRadius(10)
-                            }
-                        }
-                        else {
-                            ScrollView(.horizontal, showsIndicators: false) {
-                                LazyHStack {
-                                    ForEach(thumbnail1, id: \.self) { thing in
+                                if thumbnail1 != [UIImage]() {
+                                    ForEach(thumbnail1.suffix(thumbnail1.count - 1), id: \.self) { thing in
                                         Image(uiImage: thing)
                                             .resizable()
                                             .aspectRatio(contentMode: .fill)
@@ -95,15 +101,8 @@ struct PostSubView: View {
                                     }
                                 }
                             }
+                            .padding()
                         }
-                    }
-                    else {
-                        Image("greyPost")
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(width: 350, height: 350, alignment: .center)
-                            .clipped()
-                            .cornerRadius(10)
                     }
                     VStack {
                         Text("Description")

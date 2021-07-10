@@ -23,13 +23,6 @@ struct PostView: View {
     
     @AppStorage("wallet") var wallet:String = ""
     
-    /*
-    @AppStorage("setter") var setter = 0 {
-        didSet {
-            loader()
-        }
-    }
-    */
     @State var thumbnail = [Post]()
     
     //@State var firstLoad = true
@@ -100,7 +93,7 @@ struct PostView: View {
                         else {
                             LazyVGrid(columns: twoColumnGrid) {
                                 ForEach(thumbnail, id: \.self) { thing in
-                                    NavigationLink(destination: PostSubView(username: wallet, name: thing.postNum)) {
+                                    NavigationLink(destination: PostSubView(username: wallet,firstPhoto: thing.image, name: thing.postNum)) {
                                         Image(uiImage: thing.image)
                                             .resizable()
                                             .aspectRatio(contentMode: .fill)

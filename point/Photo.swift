@@ -18,8 +18,6 @@ struct Photo: View {
     
     @AppStorage("wallet") var wallet:String = ""
     
-    //@AppStorage("setter") var setter:Int = 0
-    
     var ref = Database.database().reference()
     
     @State var totalPosts = 0
