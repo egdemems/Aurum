@@ -143,6 +143,7 @@ struct Photo: View {
                                         ref.child("\(wallet)/posts/post_\(totalPosts)/price").setValue(Int(price))
                                         ref.child("\(wallet)/posts/post_\(totalPosts)/description").setValue(description)
                                         ref.child("\(wallet)/posts/post_\(totalPosts)/image_\(count)").setValue("\(wallet)/\(totalPosts)/\(count)")
+                                        ref.child("\(wallet)/posts/post_\(totalPosts)/image_count").setValue(count)
                                         self.count += 1
                                     }
                                     images.removeAll()
