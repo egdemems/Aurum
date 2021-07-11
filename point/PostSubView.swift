@@ -27,6 +27,8 @@ struct PostSubView: View {
     
     @State var price = 0
     
+    @State var zipcode = 0
+    
     func loader() {
         ref.child("\(name)/image_count").getData {
             (error, snapshot) in
@@ -68,12 +70,18 @@ struct PostSubView: View {
             let pop = snapshot.value as? Int
             self.price = pop ?? 0
         }
+        ref.child("\(name)/zipcode").getData {
+            (error, snapshot) in
+            let pop = snapshot.value as? Int
+            self.zipcode = pop ?? 0
+        }
     }
     
     var body: some View {
             VStack{
                 ScrollView{
                     Text(username)
+                        .bold()
                         .font(.system(size: 20, design: .rounded))
                         .frame(width: 350, alignment: .leading)
                         .foregroundColor(.black)
@@ -105,25 +113,36 @@ struct PostSubView: View {
                             }
                         }
                     }
-                    VStack {
-                        Text("Description")
-                            .font(.system(size: 25, design: .rounded))
-                            .frame(width: 350, alignment: .leading)
+                    HStack {
+                        Text(username)
+                            .bold()
+                            .font(.system(size: 20, design: .rounded))
                             .foregroundColor(.black)
                         Text(self.description)
                             .font(.system(size: 20, design: .rounded))
-                            .frame(width: 350, alignment: .leading)
                             .foregroundColor(.black)
                     }
+                    .frame(width: 350, alignment: .leading)
                     .padding()
-                    Text("Points: \(self.price)")
-                        .font(.system(size: 20, design: .rounded))
-                        .frame(width: 350, alignment: .leading)
-                        .foregroundColor(.black)
-                        .padding()
+                    HStack {
+                        Text("Zipcode:")
+                            .bold()
+                            .font(.system(size: 20, design: .rounded))
+                            .foregroundColor(.black)
+                        Text(String(self.zipcode))
+                            .font(.system(size: 20, design: .rounded))
+                            .foregroundColor(.black)
+                    }
+                    .frame(width: 350, alignment: .leading)
+                    .padding()
                     Spacer()
                 }
                 .padding(.top, 1)
+                Text("Points: \(self.price)")
+                    .font(.system(size: 20, design: .rounded))
+                    .frame(width: 350, alignment: .leading)
+                    .foregroundColor(.black)
+                    .padding()
             }
             .navigationBarTitle("", displayMode: .inline)
             .onAppear{

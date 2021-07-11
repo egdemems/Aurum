@@ -36,7 +36,6 @@ struct PostView: View {
             for child in snapshot.children {
                 let snap = child as! DataSnapshot
                 let key = snap.key
-                print(key)
                 if adder.contains("\(wallet)/posts/\(key)") {
                     print("already loaded")
                 }
