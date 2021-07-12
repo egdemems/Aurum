@@ -36,9 +36,16 @@ struct Send: View {
     
     var body: some View {
         VStack {
-            Text("\(self.amount) points available")
-                .foregroundColor(Color.white)
-                .font(.system(size: 40, design: .rounded))
+            if self.amount == 1 {
+                Text("1 point available")
+                    .foregroundColor(Color.white)
+                    .font(.system(size: 40, design: .rounded))
+            }
+            else {
+                Text("\(self.amount) points available")
+                    .foregroundColor(Color.white)
+                    .font(.system(size: 40, design: .rounded))
+            }
             Spacer()
                 .frame(height: 20)
             Text(String(digits.reduce(0, {$0*10 + $1})))

@@ -26,7 +26,12 @@ struct SendConfirm: View {
     
     var body: some View {
         VStack {
-            HStack {
+            if sending == 1 {
+                Text("Sending 1 point")
+                    .foregroundColor(Color.white)
+                    .font(.system(size: 40, design: .rounded))
+            }
+            else {
                 Text("Sending \(sending) points")
                     .foregroundColor(Color.white)
                     .font(.system(size: 40, design: .rounded))

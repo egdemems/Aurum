@@ -14,6 +14,8 @@ import FirebaseStorage
 
 struct Photo: View {
     
+    @AppStorage("zipcode") var zipcode = UserDefaults.standard.string(forKey: "Zipcode") ?? ""
+    
     @AppStorage("showingPhoto") var showingPhoto:Bool = false
     
     @AppStorage("wallet") var wallet:String = ""
@@ -34,8 +36,6 @@ struct Photo: View {
     @State var hashtags = ""
     
     @State var price = ""
-    
-    @State var zipcode = ""
     
     @State var count = 0
     
@@ -254,7 +254,7 @@ struct Photo: View {
                                 self.showingCategory.toggle()
                         }, label: {
                             Text(cat)
-                                .font(.system(size: 30, design: .rounded))
+                                .font(.system(size: 20, design: .rounded))
                                 .frame(width: 350 , height: 20, alignment: .center)
                                 .foregroundColor(.black)
                         })

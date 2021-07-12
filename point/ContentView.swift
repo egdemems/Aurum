@@ -28,24 +28,12 @@ struct ContentView: View {
         if wallet != "" {
             NavigationView {
                 TabView(selection: $tabSelection) {
-                    ZStack{
-                        Text("Images")
-                        Rectangle()
-                            .fill(Color.white)
-                            .frame(width: 450, height: 192)
-                            .position(x: 200, y: 700)
-                    }
+                    Text("Images")
                     .tabItem {
                        Image(systemName: "safari")
                      }
                     .tag(Tabs.tab1)
-                    ZStack {
-                        PostView()
-                        Rectangle()
-                            .fill(Color.white)
-                            .frame(width: 450, height: 200)
-                            .position(x: 200, y: 800)
-                    }
+                    PostView()
                     .navigationBarTitle("")
                     .navigationBarHidden(true)
                     .tabItem {
@@ -53,7 +41,14 @@ struct ContentView: View {
                      }
                     .tag(Tabs.tab2)
                     ZStack {
-                        Color(red: 255 / 255, green: 211 / 255, blue: 138 / 255)
+                        Rectangle()
+                            .fill(LinearGradient(
+                                    gradient: Gradient(stops: [
+                                .init(color: Color(#colorLiteral(red: 1, green: 0.8274509906768799, blue: 0.5411764979362488, alpha: 1)), location: 0),
+                                .init(color: Color(#colorLiteral(red: 1, green: 0.9778333902359009, blue: 0.9208333492279053, alpha: 1)), location: 1)]),
+                                    startPoint: UnitPoint(x: 0.5, y: -3.0616171314629196e-17),
+                                    endPoint: UnitPoint(x: 0.5, y: 0.9999999999999999)))
+                        .frame(width: 400, height: 900)
                         Send()
                             .accentColor(.black)
                     }
@@ -64,35 +59,26 @@ struct ContentView: View {
                        Image(systemName: "arrow.left.arrow.right")
                      }
                     .tag(Tabs.tab3)
-                    ZStack {
-                        Text("List of messages and message creator")
-                        Rectangle()
-                            .fill(Color.white)
-                            .frame(width: 450, height: 100)
-                            .position(x: 200, y: 650)
-                    }
+                    Text("messages")
                     .tabItem {
                        Image(systemName: "message")
                      }
                     .tag(Tabs.tab4)
-                    ZStack {
-                        accountView()
-                        Rectangle()
-                            .fill(Color.white)
-                            .frame(width: 450, height: 100)
-                            .position(x: 200, y: 650)
-                    }
+                    accountView()
                     .tabItem {
                        Image(systemName: "gearshape")
                      }
                     .tag(Tabs.tab5)
                 }
                 .onAppear() {
-                    let appearance = UITabBarAppearance()
+                    UITabBar.appearance().barTintColor = UIColor(Color(red: 255 / 255, green: 220 / 255, blue: 159 / 255))
+                    //let appearance = UITabBarAppearance()
+                    UITabBar.appearance().layer.borderWidth = 0.0
+                    UITabBar.appearance().clipsToBounds = true
 
-                    appearance.configureWithTransparentBackground()
+                    //appearance.configureWithTransparentBackground()
 
-                    UITabBar.appearance().standardAppearance = appearance
+                    //UITabBar.appearance().standardAppearance = appearance
                 }
                 .onChange(of: tabSelection) { newValue in
                     if tabSelection == .tab3 {
