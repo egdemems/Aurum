@@ -43,18 +43,20 @@ struct PostView: View {
                     ref.child("\(wallet)/posts/\(key)/image_1").getData {
                         (err, snapshot) in
                         let pop = snapshot.value as? String
-                        Storage.storage().reference().child("\(pop!)").getData(maxSize: 1 * 10000 * 10000) {
-                        (imageData, err) in
-                        if err != nil {
-                              print("error downloading image")
-                          } else {
-                              if let imageData = imageData {
-                                self.thumbnail.append(Post(image: UIImage(data: imageData)!, postNum: "\(wallet)/posts/\(key)"))
-                                self.adder.append("\(wallet)/posts/\(key)")
+                        if pop != nil {
+                            Storage.storage().reference().child("\(pop!)").getData(maxSize: 1 * 10000 * 10000) {
+                            (imageData, err) in
+                            if err != nil {
+                                  print("error downloading image")
                               } else {
-                                    print("couldn't unwrap")
+                                  if let imageData = imageData {
+                                    self.thumbnail.append(Post(image: UIImage(data: imageData)!, postNum: "\(wallet)/posts/\(key)"))
+                                    self.adder.append("\(wallet)/posts/\(key)")
+                                  } else {
+                                        print("couldn't unwrap")
+                                  }
                               }
-                          }
+                            }
                         }
                     }
                 }

@@ -73,7 +73,6 @@ struct signupView: View {
                                 ref.child("\(username)/fullName").setValue(fullName)
                                 ref.child("\(username)/email").setValue(email)
                                 ref.child("\(username)/password").setValue(password)
-                                ref.child("\(username)/posts/count").setValue(0)
                                 wallet = username
                                 UserDefaults.standard.set(self.wallet, forKey: "Wallet")
                                 fullName = ""
