@@ -1,8 +1,8 @@
 //
-//  ImagePicker.swift
+//  imagePicker.swift
 //  point
 //
-//  Created by Harrison Sherwood on 7/8/21.
+//  Created by Harrison Sherwood on 7/13/21.
 //
 
 import SwiftUI
@@ -21,7 +21,7 @@ struct ImagePicker: UIViewControllerRepresentable {
         // videos can be used too
         config.filter = .images
         // 0 = multiple selections
-        config.selectionLimit = 0
+        config.selectionLimit = 6
         let picker = PHPickerViewController(configuration: config)
         // assigning delegate
         picker.delegate = context.coordinator
@@ -42,7 +42,6 @@ struct ImagePicker: UIViewControllerRepresentable {
         func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
             // closing picker
             parent.picker.toggle()
-            
             for img in results {
                 if img.itemProvider.canLoadObject(ofClass: UIImage.self) {
                     img.itemProvider.loadObject(ofClass: UIImage.self) { image, err in
