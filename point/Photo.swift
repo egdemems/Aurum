@@ -14,7 +14,7 @@ import FirebaseStorage
 
 struct Photo: View {
     
-    @AppStorage("zipcode") var zipcode = UserDefaults.standard.string(forKey: "Zipcode") ?? ""
+    @AppStorage("zipcode") var zipcode: String = UserDefaults.standard.string(forKey: "Zipcode") ?? ""
     
     @AppStorage("showingPhoto") var showingPhoto:Bool = false
     
@@ -164,60 +164,56 @@ struct Photo: View {
                 .cornerRadius(20)
                 Button(action: {
                     if !images.isEmpty {
-                        if images.count < 7 {
-                            if description != "" {
-                                if price != "" {
-                                    if category != "" {
-                                        if zipcode != "" {
-                                            count = 1
-                                            let post1 = UUID()
-                                            let post2 = UUID()
-                                            for x in images {
-                                                if let imageData = x.jpegData(compressionQuality: 0.25) {
-                                                    let storage = Storage.storage()
-                                                    storage.reference().child("\(wallet)/\(post1)/\(count)").putData(imageData, metadata: nil) { (_, err) in
-                                                        if err != nil {
-                                                            print("an error occurred")
-                                                            print(err ?? "")
-                                                        } else {
-                                                            print("image uploaded successfully")
-                                                        }
+                        if description != "" {
+                            if price != "" {
+                                if category != "" {
+                                    if zipcode != "" {
+                                        count = 1
+                                        let post1 = UUID()
+                                        let post2 = UUID()
+                                        for x in images {
+                                            if let imageData = x.jpegData(compressionQuality: 0.25) {
+                                                let storage = Storage.storage()
+                                                storage.reference().child("\(wallet)/\(post1)/\(count)").putData(imageData, metadata: nil) { (_, err) in
+                                                    if err != nil {
+                                                        print("an error occurred")
+                                                        print(err ?? "")
+                                                    } else {
+                                                        print("image uploaded successfully")
                                                     }
-                                                } else {
-                                                    print("couldnt unwrap image to data")
                                                 }
-                                                ref.child("\(wallet)/posts/\(post1)/price").setValue(Int(price))
-                                                ref.child("\(wallet)/posts/\(post1)/zipcode").setValue(Int(zipcode))
-                                                ref.child("\(wallet)/posts/\(post1)/description").setValue(description)
-                                                ref.child("\(wallet)/posts/\(post1)/image_\(count)").setValue("\(wallet)/\(post1)/\(count)")
-                                                ref.child("\(wallet)/posts/\(post1)/image_count").setValue(count)
-                                                count += 1
+                                            } else {
+                                                print("couldnt unwrap image to data")
                                             }
-                                            ref.child("\(category)/\(zipcode)/\(post2)").setValue("\(wallet)/posts/\(post1)")
-                                            images.removeAll()
-                                            description = ""
-                                            price = ""
-                                            category = ""
-                                            self.showingPhoto = false
+                                            ref.child("\(wallet)/posts/\(post1)/price").setValue(Int(price))
+                                            ref.child("\(wallet)/posts/\(post1)/zipcode").setValue(Int(zipcode))
+                                            ref.child("\(wallet)/posts/\(post1)/description").setValue(description)
+                                            ref.child("\(wallet)/posts/\(post1)/image_\(count)").setValue("\(wallet)/\(post1)/\(count)")
+                                            ref.child("\(wallet)/posts/\(post1)/image_count").setValue(count)
+                                            ref.child("\(wallet)/posts/\(post1)/category").setValue(category)
+                                            count += 1
                                         }
-                                        else {
-                                            print("zipcode = ''")
-                                        }
+                                        ref.child("\(category)/\(zipcode)/\(post2)").setValue("\(wallet)/posts/\(post1)")
+                                        images.removeAll()
+                                        description = ""
+                                        price = ""
+                                        category = ""
+                                        self.showingPhoto = false
                                     }
                                     else {
-                                        print("category = ''")
+                                        print("zipcode = ''")
                                     }
                                 }
                                 else {
-                                    print("price = nil")
+                                    print("category = ''")
                                 }
                             }
                             else {
-                                print("description = ''")
+                                print("price = nil")
                             }
                         }
                         else {
-                            print("too many images")
+                            print("description = ''")
                         }
                     }
                     else {

@@ -27,6 +27,8 @@ struct PostView: View {
     
     @State var adder = [String]()
     
+    @State var postsLen = 0
+    
     //@State var firstLoad = true
     
     var twoColumnGrid = [GridItem(.flexible()), GridItem(.flexible())]
@@ -50,7 +52,7 @@ struct PostView: View {
                                   print("error downloading image")
                               } else {
                                   if let imageData = imageData {
-                                    self.thumbnail.append(Post(image: UIImage(data: imageData)!, postNum: "\(wallet)/posts/\(key)"))
+                                    self.thumbnail.insert(Post(image: UIImage(data: imageData)!, postNum: "\(wallet)/posts/\(key)"), at: 0)
                                     self.adder.append("\(wallet)/posts/\(key)")
                                   } else {
                                         print("couldn't unwrap")
@@ -110,7 +112,11 @@ struct PostView: View {
                     loader()
                 }
                 .padding(.top, 1)
-                .sheet(isPresented: $showingPhoto) {
+                .sheet(isPresented: $showingPhoto, onDismiss: {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                            loader()
+                        }
+                }) {
                     Photo()
                 }
             }

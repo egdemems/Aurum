@@ -11,6 +11,10 @@ import FirebaseStorage
 
 struct PostSubView: View {
     
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    
+    @AppStorage("wallet") var wallet:String = ""
+    
     var ref = Database.database().reference()
     
     var username: String
@@ -24,6 +28,8 @@ struct PostSubView: View {
     @State var thumbnail1 = [UIImage]()
     
     @State var description = ""
+    
+    @State var category = ""
     
     @State var price = 0
     
@@ -43,17 +49,19 @@ struct PostSubView: View {
                         ref.child("\(name)/image_\(x)").observe(.value) {
                             (snapshot) in
                             let pop1 = snapshot.value as? String
-                            Storage.storage().reference().child("\(pop1!)").getData(maxSize: 1 * 10000 * 10000) {
-                            (imageData, err) in
-                            if err != nil {
-                                  print("error downloading image")
-                              } else {
-                                  if let imageData = imageData {
-                                    self.thumbnail1.append(UIImage(data: imageData)!)
+                            if pop1 != nil {
+                                Storage.storage().reference().child("\(pop1!)").getData(maxSize: 1 * 10000 * 10000) {
+                                (imageData, err) in
+                                if err != nil {
+                                      print("error downloading image")
                                   } else {
-                                        print("couldn't unwrap")
+                                      if let imageData = imageData {
+                                        self.thumbnail1.append(UIImage(data: imageData)!)
+                                      } else {
+                                            print("couldn't unwrap")
+                                      }
                                   }
-                              }
+                                }
                             }
                         }
                     }
@@ -64,6 +72,11 @@ struct PostSubView: View {
             (error, snapshot) in
             let pop = snapshot.value as? String
             self.description = pop ?? "No Description"
+        }
+        ref.child("\(name)/category").getData {
+            (error, snapshot) in
+            let pop = snapshot.value as? String
+            self.category = pop ?? ""
         }
         ref.child("\(name)/price").getData {
             (error, snapshot) in
@@ -78,14 +91,9 @@ struct PostSubView: View {
     }
     
     var body: some View {
-            VStack{
-                ScrollView{
-                    Text(username)
-                        .bold()
-                        .font(.system(size: 20, design: .rounded))
-                        .frame(width: 350, alignment: .leading)
-                        .foregroundColor(.black)
-                        .padding()
+        VStack{
+            ScrollView {
+                ZStack(alignment: .topLeading) {
                     if postCount1 == true {
                         Image(uiImage: firstPhoto)
                             .resizable()
@@ -113,17 +121,57 @@ struct PostSubView: View {
                             }
                         }
                     }
+                    Button(action: {
+                            self.presentationMode.wrappedValue.dismiss()
+                            }) {
+                                ZStack {
+                                    Ellipse()
+                                        .fill(Color(red: 255 / 255, green: 211 / 255, blue: 138 / 255))
+                                    .frame(width: 50, height: 50)
+                                    Image(systemName: "chevron.left")
+                                        .foregroundColor(.white)
+                                }
+                                .padding(.leading, 20)
+                                .padding(.top, 20)
+                    }
+                }
+                .frame(width: 390, height: 390, alignment: .center)
+                VStack{
                     HStack {
                         Text(username)
                             .bold()
                             .font(.system(size: 20, design: .rounded))
                             .foregroundColor(.black)
-                        Text(self.description)
+                        Spacer()
+                        Text("\(self.price)")
                             .font(.system(size: 20, design: .rounded))
                             .foregroundColor(.black)
+                            .bold()
                     }
                     .frame(width: 350, alignment: .leading)
                     .padding()
+                    Text("Description")
+                        .bold()
+                        .font(.system(size: 20, design: .rounded))
+                        .foregroundColor(.black)
+                        .frame(width: 350, alignment: .leading)
+                    Text(self.description)
+                        .font(.system(size: 20, design: .rounded))
+                        .foregroundColor(.black)
+                        .frame(width: 350, alignment: .leading)
+                    Spacer()
+                        .frame(height:40)
+                    Text("Category")
+                        .bold()
+                        .font(.system(size: 20, design: .rounded))
+                        .foregroundColor(.black)
+                        .frame(width: 350, alignment: .leading)
+                    Text(self.category)
+                        .font(.system(size: 20, design: .rounded))
+                        .foregroundColor(.black)
+                        .frame(width: 350, alignment: .leading)
+                    Spacer()
+                        .frame(height:40)
                     HStack {
                         Text("Zipcode:")
                             .bold()
@@ -137,16 +185,33 @@ struct PostSubView: View {
                     .padding()
                     Spacer()
                 }
+                .background(Color(red: 255 / 255, green: 220 / 255, blue: 159 / 255))
+                .cornerRadius(10)
                 .padding(.top, 1)
-                Text("Points: \(self.price)")
-                    .font(.system(size: 20, design: .rounded))
-                    .frame(width: 350, alignment: .leading)
-                    .foregroundColor(.black)
-                    .padding()
+                .toolbar {
+                    ToolbarItem(placement: .bottomBar) {
+                        if username == wallet {
+                            Button(action: {}, label: {
+                                Text("Buy")
+                                    .foregroundColor(.black)
+                                    .font(.system(size: 30, design: .rounded))
+                                    .padding()
+                            })
+                        }
+                    }
+                }
             }
-            .navigationBarTitle("", displayMode: .inline)
-            .onAppear{
-                    loader()
-            }
+        }
+        //.navigationBarBackButtonHidden(true)
+        .navigationBarTitle("")
+        .navigationBarHidden(true)
+        //.navigationBarItems(leading: btnBack)
+        //.navigationBarTitle("", displayMode: .inline)
+        .onAppear{
+            loader()
+            UIToolbar.appearance().barTintColor = UIColor(Color(red: 255 / 255, green: 220 / 255, blue: 159 / 255))
+            UIToolbar.appearance().layer.borderWidth = 0.0
+            //UIToolbar.appearance().clipsToBounds = true
+        }
     }
 }

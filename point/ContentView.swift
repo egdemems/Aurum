@@ -12,6 +12,8 @@ struct ContentView: View {
     
     var ref = Database.database().reference()
     
+    @AppStorage("zipcode") var zipcode = UserDefaults.standard.string(forKey: "Zipcode") ?? ""
+    
     @AppStorage("wallet") var wallet = UserDefaults.standard.string(forKey: "Wallet") ?? ""
     
     @AppStorage("showingSender") var showingSender = false
@@ -24,11 +26,13 @@ struct ContentView: View {
     
     @State var currentColor = Color.black
     
+    @State var currentTabBarColor = Color.black
+    
     var body: some View {
         if wallet != "" {
             NavigationView {
                 TabView(selection: $tabSelection) {
-                    Text("Images")
+                    ExploreView()
                     .tabItem {
                        Image(systemName: "safari")
                      }
@@ -41,14 +45,7 @@ struct ContentView: View {
                      }
                     .tag(Tabs.tab2)
                     ZStack {
-                        Rectangle()
-                            .fill(LinearGradient(
-                                    gradient: Gradient(stops: [
-                                .init(color: Color(#colorLiteral(red: 1, green: 0.8274509906768799, blue: 0.5411764979362488, alpha: 1)), location: 0),
-                                .init(color: Color(#colorLiteral(red: 1, green: 0.9778333902359009, blue: 0.9208333492279053, alpha: 1)), location: 1)]),
-                                    startPoint: UnitPoint(x: 0.5, y: -3.0616171314629196e-17),
-                                    endPoint: UnitPoint(x: 0.5, y: 0.9999999999999999)))
-                        .frame(width: 400, height: 900)
+                        Color(red: 255 / 255, green: 211 / 255, blue: 138 / 255)
                         Send()
                             .accentColor(.black)
                     }
