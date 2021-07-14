@@ -25,6 +25,8 @@ struct Photo: View {
     @State var images: [UIImage] = []
     @State var picker = false
     
+    @State var title = ""
+    
     @State var description = ""
     
     var categories = ["Appliances", "Apps & Games", "Arts, Crafts, & Sewing", "Automotive Parts & Accessories", "Beauty & Personal Care",
@@ -53,7 +55,8 @@ struct Photo: View {
                 ZStack{
                     Rectangle()
                         .fill(Color(red: 255 / 255, green: 211 / 255, blue: 138 / 255))
-                        .frame(width: 450, height: 100)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .frame(height: 100)
                     if !images.isEmpty {
                         ScrollView(.horizontal, showsIndicators: false, content: {
                             LazyHStack(spacing: 5) {
@@ -61,7 +64,7 @@ struct Photo: View {
                                     Image(uiImage: img)
                                         .resizable()
                                         .aspectRatio(contentMode: .fill)
-                                        .frame(width: 100, height: 100, alignment: .topLeading)
+                                        .frame(width: 100, height: 100)
                                         .clipped()
                                         .cornerRadius(10)
                                 }
@@ -78,14 +81,30 @@ struct Photo: View {
                         picker.toggle()
                     }, label: {
                         Text("")
-                            .frame(width: 450, height: 100)
+                            .frame(maxWidth: .infinity, alignment: .center)
+                            .frame(height: 100)
                     })
                 }
                 //.padding(.top, 30)
                 VStack {
+                    Text("Title")
+                        .font(.system(size: 20))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .frame(height: 20)
+                        .foregroundColor(.black)
+                    TextField("", text: $title)
+                        .font(.system(size: 20))
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .frame(maxWidth: .infinity, alignment: .center)
+                }
+                .frame(maxWidth: .infinity, alignment: .center)
+                .padding()
+                .background(Color(red: 255 / 255, green: 211 / 255, blue: 138 / 255))
+                VStack {
                     Text("Description")
-                        .font(.system(size: 20, design: .rounded))
-                        .frame(width: 300 , height: 20, alignment: .leading)
+                        .font(.system(size: 20))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .frame(height: 20)
                         .foregroundColor(.black)
                     ZStack(alignment: .topLeading) {
                                 RoundedRectangle(cornerRadius: 8, style: .continuous)
@@ -102,33 +121,35 @@ struct Photo: View {
                                     .padding(4)
                                 
                             }
-                            .frame(width: 350, height: 300)
+                            .frame(maxWidth: .infinity, alignment: .center)
+                            .frame(height: 300)
                             .font(.body)
                 }
-                .frame(width: 350)
+                .frame(maxWidth: .infinity, alignment: .center)
                 .padding()
                 .background(Color(red: 255 / 255, green: 211 / 255, blue: 138 / 255))
-                .cornerRadius(20)
+                //.cornerRadius(20)
                 VStack {
                     Text("Points")
-                        .font(.system(size: 20, design: .rounded))
-                        .frame(width: 300 , height: 20, alignment: .leading)
+                        .font(.system(size: 20))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .frame(height: 20)
                         .foregroundColor(.black)
                     TextField("0", text: $price)
-                        .font(.system(size: 20, design: .rounded))
+                        .font(.system(size: 20))
                         .keyboardType(.numberPad)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .frame(width: 325)
+                        .frame(maxWidth: .infinity, alignment: .center)
                 }
-                .frame(width: 350)
+                .frame(maxWidth: .infinity, alignment: .center)
                 .padding()
                 .background(Color(red: 255 / 255, green: 211 / 255, blue: 138 / 255))
-                .cornerRadius(20)
+                //.cornerRadius(20)
                 VStack {
                     Button(action: {self.showingCategory.toggle()}, label: {
                         HStack {
                             Text("Category")
-                                .font(.system(size: 20, design: .rounded))
+                                .font(.system(size: 20))
                                 .foregroundColor(.black)
                             Spacer()
                             if category == "" {
@@ -140,65 +161,74 @@ struct Photo: View {
                                     .foregroundColor(Color.black)
                             }
                         }
-                        .frame(width: 350 , height: 20, alignment: .leading)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .frame(height: 20)
                     })
                 }
-                .frame(width: 350)
+                .frame(maxWidth: .infinity, alignment: .center)
                 .padding()
                 .background(Color(red: 255 / 255, green: 211 / 255, blue: 138 / 255))
-                .cornerRadius(20)
+                //.cornerRadius(20)
                 VStack {
                     Text("Zipcode")
-                        .font(.system(size: 20, design: .rounded))
-                        .frame(width: 300 , height: 20, alignment: .leading)
+                        .font(.system(size: 20))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .frame(height: 20)
                         .foregroundColor(.black)
                     TextField("0", text: $zipcode)
-                        .font(.system(size: 20, design: .rounded))
+                        .font(.system(size: 20))
                         .keyboardType(.numberPad)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .frame(width: 325)
+                        .frame(maxWidth: .infinity, alignment: .center)
                 }
-                .frame(width: 350)
+                .frame(maxWidth: .infinity, alignment: .center)
                 .padding()
                 .background(Color(red: 255 / 255, green: 211 / 255, blue: 138 / 255))
-                .cornerRadius(20)
+                //.cornerRadius(20)
                 Button(action: {
                     if !images.isEmpty {
                         if description != "" {
                             if price != "" {
                                 if category != "" {
                                     if zipcode != "" {
-                                        count = 1
-                                        let post1 = UUID()
-                                        let post2 = UUID()
-                                        for x in images {
-                                            if let imageData = x.jpegData(compressionQuality: 0.25) {
-                                                let storage = Storage.storage()
-                                                storage.reference().child("\(wallet)/\(post1)/\(count)").putData(imageData, metadata: nil) { (_, err) in
-                                                    if err != nil {
-                                                        print("an error occurred")
-                                                        print(err ?? "")
-                                                    } else {
-                                                        print("image uploaded successfully")
+                                        if title != "" {
+                                            count = 1
+                                            let post1 = UUID()
+                                            let post2 = UUID()
+                                            for x in images {
+                                                if let imageData = x.jpegData(compressionQuality: 0.25) {
+                                                    let storage = Storage.storage()
+                                                    storage.reference().child("\(wallet)/\(post1)/\(count)").putData(imageData, metadata: nil) { (_, err) in
+                                                        if err != nil {
+                                                            print("an error occurred")
+                                                            print(err ?? "")
+                                                        } else {
+                                                            print("image uploaded successfully")
+                                                        }
                                                     }
+                                                } else {
+                                                    print("couldnt unwrap image to data")
                                                 }
-                                            } else {
-                                                print("couldnt unwrap image to data")
+                                                ref.child("\(wallet)/posts/\(post1)/title").setValue(title)
+                                                ref.child("\(wallet)/posts/\(post1)/price").setValue(Int(price))
+                                                ref.child("\(wallet)/posts/\(post1)/zipcode").setValue(Int(zipcode))
+                                                ref.child("\(wallet)/posts/\(post1)/description").setValue(description)
+                                                ref.child("\(wallet)/posts/\(post1)/image_\(count)").setValue("\(wallet)/\(post1)/\(count)")
+                                                ref.child("\(wallet)/posts/\(post1)/image_count").setValue(count)
+                                                ref.child("\(wallet)/posts/\(post1)/category").setValue(category)
+                                                count += 1
                                             }
-                                            ref.child("\(wallet)/posts/\(post1)/price").setValue(Int(price))
-                                            ref.child("\(wallet)/posts/\(post1)/zipcode").setValue(Int(zipcode))
-                                            ref.child("\(wallet)/posts/\(post1)/description").setValue(description)
-                                            ref.child("\(wallet)/posts/\(post1)/image_\(count)").setValue("\(wallet)/\(post1)/\(count)")
-                                            ref.child("\(wallet)/posts/\(post1)/image_count").setValue(count)
-                                            ref.child("\(wallet)/posts/\(post1)/category").setValue(category)
-                                            count += 1
+                                            ref.child("\(category)/\(zipcode)/\(post2)").setValue("\(wallet)/posts/\(post1)")
+                                            images.removeAll()
+                                            description = ""
+                                            price = ""
+                                            category = ""
+                                            title = ""
+                                            self.showingPhoto = false
                                         }
-                                        ref.child("\(category)/\(zipcode)/\(post2)").setValue("\(wallet)/posts/\(post1)")
-                                        images.removeAll()
-                                        description = ""
-                                        price = ""
-                                        category = ""
-                                        self.showingPhoto = false
+                                        else {
+                                            print("title = ''")
+                                        }
                                     }
                                     else {
                                         print("zipcode = ''")
@@ -221,15 +251,16 @@ struct Photo: View {
                     }
                 }, label: {
                     Text("Post")
-                        .font(.system(size: 30, design: .rounded))
-                        .frame(width: 350 , height: 20, alignment: .center)
+                        .font(.system(size: 30))
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .frame(height: 20)
                         .foregroundColor(.black)
                 })
                 .padding()
-                .font(.system(size: 20, design: .rounded))
+                .font(.system(size: 20))
                 .background(Color(red: 255 / 255, green: 211 / 255, blue: 138 / 255))
                 .foregroundColor(.white)
-                .cornerRadius(30)
+                //.cornerRadius(30)
             }
             .simultaneousGesture(
                 TapGesture()
@@ -250,15 +281,16 @@ struct Photo: View {
                                 self.showingCategory.toggle()
                         }, label: {
                             Text(cat)
-                                .font(.system(size: 20, design: .rounded))
-                                .frame(width: 350 , height: 20, alignment: .center)
+                                .font(.system(size: 20))
+                                .frame(maxWidth: .infinity, alignment: .center)
+                                .frame(height: 20)
                                 .foregroundColor(.black)
                         })
                         .padding()
-                        .font(.system(size: 20, design: .rounded))
+                        .font(.system(size: 20))
                         .background(Color(red: 255 / 255, green: 211 / 255, blue: 138 / 255))
                         .foregroundColor(.white)
-                        .cornerRadius(30)
+                        //.cornerRadius(30)
                     }
                 }
             }

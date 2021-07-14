@@ -27,6 +27,8 @@ struct PostSubView: View {
     
     @State var thumbnail1 = [UIImage]()
     
+    @State var title = ""
+    
     @State var description = ""
     
     @State var category = ""
@@ -50,7 +52,7 @@ struct PostSubView: View {
                             (snapshot) in
                             let pop1 = snapshot.value as? String
                             if pop1 != nil {
-                                Storage.storage().reference().child("\(pop1!)").getData(maxSize: 1 * 10000 * 10000) {
+                                Storage.storage().reference().child("\(pop1!)").getData(maxSize: 1 * 1024 * 1024) {
                                 (imageData, err) in
                                 if err != nil {
                                       print("error downloading image")
@@ -67,6 +69,11 @@ struct PostSubView: View {
                     }
                 }
             }
+        }
+        ref.child("\(name)/title").getData {
+            (error, snapshot) in
+            let pop = snapshot.value as? String
+            self.title = pop ?? "No title"
         }
         ref.child("\(name)/description").getData {
             (error, snapshot) in
@@ -91,60 +98,44 @@ struct PostSubView: View {
     }
     
     var body: some View {
-        VStack{
+        ZStack(alignment: .topLeading){
             ScrollView {
-                ZStack(alignment: .topLeading) {
-                    if postCount1 == true {
-                        Image(uiImage: firstPhoto)
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(width: 390, height: 390, alignment: .center)
-                            .clipped()
-                    }
-                    else {
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            LazyHStack {
-                                Image(uiImage: firstPhoto)
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fill)
-                                    .frame(width: 390, height: 390, alignment: .center)
-                                    .clipped()
-                                if thumbnail1 != [UIImage]() {
-                                    ForEach(thumbnail1, id: \.self) { thing in
-                                        Image(uiImage: thing)
-                                            .resizable()
-                                            .aspectRatio(contentMode: .fill)
-                                            .frame(width: 390, height: 390, alignment: .center)
-                                            .clipped()
-                                    }
+                if postCount1 == true {
+                    Image(uiImage: firstPhoto)
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: 390, height: 390, alignment: .center)
+                        .clipped()
+                }
+                else {
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        LazyHStack {
+                            Image(uiImage: firstPhoto)
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: 390, height: 390, alignment: .center)
+                                .clipped()
+                            if thumbnail1 != [UIImage]() {
+                                ForEach(thumbnail1, id: \.self) { thing in
+                                    Image(uiImage: thing)
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fill)
+                                        .frame(width: 390, height: 390, alignment: .center)
+                                        .clipped()
                                 }
                             }
                         }
                     }
-                    Button(action: {
-                            self.presentationMode.wrappedValue.dismiss()
-                            }) {
-                                ZStack {
-                                    Ellipse()
-                                        .fill(Color(red: 255 / 255, green: 211 / 255, blue: 138 / 255))
-                                    .frame(width: 50, height: 50)
-                                    Image(systemName: "chevron.left")
-                                        .foregroundColor(.white)
-                                }
-                                .padding(.leading, 20)
-                                .padding(.top, 20)
-                    }
                 }
-                .frame(width: 390, height: 390, alignment: .center)
                 VStack{
                     HStack {
-                        Text(username)
+                        Text(title)
                             .bold()
-                            .font(.system(size: 20, design: .rounded))
+                            .font(.system(size: 20))
                             .foregroundColor(.black)
                         Spacer()
                         Text("\(self.price)")
-                            .font(.system(size: 20, design: .rounded))
+                            .font(.system(size: 20))
                             .foregroundColor(.black)
                             .bold()
                     }
@@ -152,22 +143,22 @@ struct PostSubView: View {
                     .padding()
                     Text("Description")
                         .bold()
-                        .font(.system(size: 20, design: .rounded))
+                        .font(.system(size: 20))
                         .foregroundColor(.black)
                         .frame(width: 350, alignment: .leading)
                     Text(self.description)
-                        .font(.system(size: 20, design: .rounded))
+                        .font(.system(size: 20))
                         .foregroundColor(.black)
                         .frame(width: 350, alignment: .leading)
                     Spacer()
                         .frame(height:40)
                     Text("Category")
                         .bold()
-                        .font(.system(size: 20, design: .rounded))
+                        .font(.system(size: 20))
                         .foregroundColor(.black)
                         .frame(width: 350, alignment: .leading)
                     Text(self.category)
-                        .font(.system(size: 20, design: .rounded))
+                        .font(.system(size: 20))
                         .foregroundColor(.black)
                         .frame(width: 350, alignment: .leading)
                     Spacer()
@@ -175,32 +166,69 @@ struct PostSubView: View {
                     HStack {
                         Text("Zipcode:")
                             .bold()
-                            .font(.system(size: 20, design: .rounded))
+                            .font(.system(size: 20))
                             .foregroundColor(.black)
                         Text(String(self.zipcode))
-                            .font(.system(size: 20, design: .rounded))
+                            .font(.system(size: 20))
                             .foregroundColor(.black)
                     }
-                    .frame(width: 350, alignment: .leading)
+                    .frame(maxWidth: .infinity, alignment: .leading)
                     .padding()
                     Spacer()
                 }
                 .background(Color(red: 255 / 255, green: 220 / 255, blue: 159 / 255))
-                .cornerRadius(10)
                 .padding(.top, 1)
-                .toolbar {
-                    ToolbarItem(placement: .bottomBar) {
-                        if username == wallet {
-                            Button(action: {}, label: {
-                                Text("Buy")
-                                    .foregroundColor(.black)
-                                    .font(.system(size: 30, design: .rounded))
-                                    .padding()
-                            })
-                        }
+                VStack {
+                    HStack {
+                        Text(username)
+                            .bold()
+                            .font(.system(size: 25))
+                            .foregroundColor(.black)
                     }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding()
+                }
+                .background(Color(red: 255 / 255, green: 220 / 255, blue: 159 / 255))
+                .padding(.top, 10)
+            }
+            Button(action: {
+                    self.presentationMode.wrappedValue.dismiss()
+                    }) {
+                        ZStack {
+                            Ellipse()
+                                .fill(Color(red: 255 / 255, green: 211 / 255, blue: 138 / 255))
+                            .frame(width: 50, height: 50)
+                            Image(systemName: "chevron.left")
+                                .foregroundColor(.white)
+                        }
+                        .padding(.leading, 20)
+                        .padding(.top, 20)
+            }
+            HStack(alignment: .center) {
+                if username == wallet {
+                    Button(action: {}, label: {
+                        ZStack {
+                            Ellipse()
+                                .fill(Color(red: 255 / 255, green: 211 / 255, blue: 138 / 255))
+                            .frame(width: 50, height: 50)
+                            Image(systemName: "message")
+                                .foregroundColor(.white)
+                        }
+                        .padding(.top, 20)
+                    })
+                    Button(action: {}, label: {
+                        Text("Buy")
+                            .foregroundColor(.white)
+                            .font(.system(size: 30))
+                            .frame(width: 100, height: 50)
+                            .background(Color(red: 255 / 255, green: 211 / 255, blue: 138 / 255))
+                            .cornerRadius(30)
+                    })
+                    .padding(.trailing, 20)
+                    .padding(.top, 20)
                 }
             }
+            .frame(maxWidth: .infinity, alignment: .trailing)
         }
         //.navigationBarBackButtonHidden(true)
         .navigationBarTitle("")

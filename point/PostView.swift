@@ -48,7 +48,7 @@ struct PostView: View {
                         (err, snapshot) in
                         let pop = snapshot.value as? String
                         if pop != nil {
-                            Storage.storage().reference().child("\(pop!)").getData(maxSize: 1 * 10000 * 10000) {
+                            Storage.storage().reference().child("\(pop!)").getData(maxSize: 1 * 1024 * 1024) {
                             (imageData, err) in
                             if err != nil {
                                   print("error downloading image")
@@ -74,20 +74,18 @@ struct PostView: View {
                 .frame(height: 30)
             Button(action: {self.showingPhoto = true}, label: {
                 Text("List an item")
-                    .font(.system(size: 30, design: .rounded))
-                    .frame(width: 350 , height: 20, alignment: .center)
+                    .font(.system(size: 30))
                     .foregroundColor(.black)
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .frame(height: 20)
             })
             .padding()
-            .font(.system(size: 20, design: .rounded))
             .background(Color(red: 255 / 255, green: 211 / 255, blue: 138 / 255))
-            .foregroundColor(.white)
-            .cornerRadius(30)
             ScrollView {
                 Spacer()
                     .frame(height: 30)
                 Text("Your Listings")
-                    .font(.system(size: 25, design: .rounded))
+                    .font(.system(size: 25))
                     .frame(width: 350 , height: 20, alignment: .leading)
                     .foregroundColor(.black)
                 Spacer()
