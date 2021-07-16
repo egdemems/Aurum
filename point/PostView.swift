@@ -73,14 +73,9 @@ struct PostView: View {
             Spacer()
                 .frame(height: 30)
             Button(action: {self.showingPhoto = true}, label: {
-                Text("List an item")
-                    .font(.system(size: 30))
-                    .foregroundColor(.black)
-                    .frame(maxWidth: .infinity, alignment: .center)
-                    .frame(height: 20)
+                Neumorphic(name: "List an item", width: 350)
+                    .padding()
             })
-            .padding()
-            .background(Color(red: 255 / 255, green: 211 / 255, blue: 138 / 255))
             ScrollView {
                 Spacer()
                     .frame(height: 30)

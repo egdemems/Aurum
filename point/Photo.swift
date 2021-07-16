@@ -50,247 +50,247 @@ struct Photo: View {
     }
     
     var body: some View {
-        ScrollView {
-            VStack {
-                ZStack{
-                    Rectangle()
-                        .fill(Color(red: 255 / 255, green: 211 / 255, blue: 138 / 255))
-                        .frame(maxWidth: .infinity, alignment: .center)
-                        .frame(height: 100)
-                    if !images.isEmpty {
-                        ScrollView(.horizontal, showsIndicators: false, content: {
-                            LazyHStack(spacing: 5) {
-                                ForEach(images, id: \.self) { img in
-                                    Image(uiImage: img)
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fill)
-                                        .frame(width: 100, height: 100)
-                                        .clipped()
-                                        .cornerRadius(10)
-                                }
-                            }
-                        })
-                    } else {
-                        Image("pluscamera")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width:25, height:25)
-                    }
-                    Button(action: {
-                        images.removeAll()
-                        picker.toggle()
-                    }, label: {
-                        Text("")
+        ZStack {
+            Color(red: 255 / 255, green: 220 / 255, blue: 159 / 255)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .edgesIgnoringSafeArea(.all)
+            ScrollView {
+                VStack {
+                    ZStack{
+                        Rectangle()
+                            .fill(Color(red: 255 / 255, green: 211 / 255, blue: 138 / 255))
                             .frame(maxWidth: .infinity, alignment: .center)
                             .frame(height: 100)
-                    })
-                }
-                //.padding(.top, 30)
-                VStack {
-                    Text("Title")
-                        .font(.system(size: 20))
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .frame(height: 20)
-                        .foregroundColor(.black)
-                    TextField("", text: $title)
-                        .font(.system(size: 20))
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .frame(maxWidth: .infinity, alignment: .center)
-                }
-                .frame(maxWidth: .infinity, alignment: .center)
-                .padding()
-                .background(Color(red: 255 / 255, green: 211 / 255, blue: 138 / 255))
-                VStack {
-                    Text("Description")
-                        .font(.system(size: 20))
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .frame(height: 20)
-                        .foregroundColor(.black)
-                    ZStack(alignment: .topLeading) {
-                                RoundedRectangle(cornerRadius: 8, style: .continuous)
-                                    .fill(Color.white)
-                                
-                                if description.isEmpty {
-                                    Text("Add item color, style, condition, sizing, and any other important details.")
-                                        .foregroundColor(Color(UIColor.placeholderText))
-                                        .padding(.horizontal, 8)
-                                        .padding(.vertical, 12)
+                        if !images.isEmpty {
+                            ScrollView(.horizontal, showsIndicators: false, content: {
+                                LazyHStack(spacing: 5) {
+                                    ForEach(images, id: \.self) { img in
+                                        Image(uiImage: img)
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fill)
+                                            .frame(width: 100, height: 100)
+                                            .clipped()
+                                            .cornerRadius(10)
+                                    }
                                 }
-                                
-                                TextEditor(text: $description)
-                                    .padding(4)
-                                
+                            })
+                        } else {
+                            Image("pluscamera")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width:25, height:25)
+                        }
+                        Button(action: {
+                            images.removeAll()
+                            picker.toggle()
+                        }, label: {
+                            Text("")
+                                .frame(maxWidth: .infinity, alignment: .center)
+                                .frame(height: 100)
+                        })
+                    }
+                    //.padding(.top, 30)
+                    VStack {
+                        Text("Title")
+                            .font(.system(size: 20))
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .frame(height: 20)
+                            .foregroundColor(.black)
+                        TextField("", text: $title)
+                            .font(.system(size: 20))
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .frame(maxWidth: .infinity, alignment: .center)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .padding()
+                    VStack {
+                        Text("Description")
+                            .font(.system(size: 20))
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .frame(height: 20)
+                            .foregroundColor(.black)
+                        ZStack(alignment: .topLeading) {
+                                    RoundedRectangle(cornerRadius: 8, style: .continuous)
+                                        .fill(Color.white)
+                                    
+                                    if description.isEmpty {
+                                        Text("Add item color, style, condition, sizing, and any other important details.")
+                                            .foregroundColor(Color(UIColor.placeholderText))
+                                            .padding(.horizontal, 8)
+                                            .padding(.vertical, 12)
+                                    }
+                                    
+                                    TextEditor(text: $description)
+                                        .padding(4)
+                                    
+                                }
+                                .frame(maxWidth: .infinity, alignment: .center)
+                                .frame(height: 300)
+                                .font(.body)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .padding()
+                    //.cornerRadius(20)
+                    VStack {
+                        Text("Points")
+                            .font(.system(size: 20))
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .frame(height: 20)
+                            .foregroundColor(.black)
+                        TextField("0", text: $price)
+                            .font(.system(size: 20))
+                            .keyboardType(.numberPad)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .frame(maxWidth: .infinity, alignment: .center)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .padding()
+                    //.cornerRadius(20)
+                    VStack {
+                        Button(action: {self.showingCategory.toggle()}, label: {
+                            HStack {
+                                Text("Category")
+                                    .font(.system(size: 20))
+                                    .foregroundColor(.black)
+                                Spacer()
+                                if category == "" {
+                                    Text("Choose")
+                                        .foregroundColor(Color.gray)
+                                }
+                                else {
+                                    Text(category)
+                                        .foregroundColor(Color.black)
+                                }
                             }
                             .frame(maxWidth: .infinity, alignment: .center)
-                            .frame(height: 300)
-                            .font(.body)
-                }
-                .frame(maxWidth: .infinity, alignment: .center)
-                .padding()
-                .background(Color(red: 255 / 255, green: 211 / 255, blue: 138 / 255))
-                //.cornerRadius(20)
-                VStack {
-                    Text("Points")
-                        .font(.system(size: 20))
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .frame(height: 20)
-                        .foregroundColor(.black)
-                    TextField("0", text: $price)
-                        .font(.system(size: 20))
-                        .keyboardType(.numberPad)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .frame(maxWidth: .infinity, alignment: .center)
-                }
-                .frame(maxWidth: .infinity, alignment: .center)
-                .padding()
-                .background(Color(red: 255 / 255, green: 211 / 255, blue: 138 / 255))
-                //.cornerRadius(20)
-                VStack {
-                    Button(action: {self.showingCategory.toggle()}, label: {
-                        HStack {
-                            Text("Category")
-                                .font(.system(size: 20))
-                                .foregroundColor(.black)
-                            Spacer()
-                            if category == "" {
-                                Text("Choose")
-                                    .foregroundColor(Color.gray)
-                            }
-                            else {
-                                Text(category)
-                                    .foregroundColor(Color.black)
-                            }
-                        }
-                        .frame(maxWidth: .infinity, alignment: .center)
-                        .frame(height: 20)
-                    })
-                }
-                .frame(maxWidth: .infinity, alignment: .center)
-                .padding()
-                .background(Color(red: 255 / 255, green: 211 / 255, blue: 138 / 255))
-                //.cornerRadius(20)
-                VStack {
-                    Text("Zipcode")
-                        .font(.system(size: 20))
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .frame(height: 20)
-                        .foregroundColor(.black)
-                    TextField("0", text: $zipcode)
-                        .font(.system(size: 20))
-                        .keyboardType(.numberPad)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .frame(maxWidth: .infinity, alignment: .center)
-                }
-                .frame(maxWidth: .infinity, alignment: .center)
-                .padding()
-                .background(Color(red: 255 / 255, green: 211 / 255, blue: 138 / 255))
-                //.cornerRadius(20)
-                Button(action: {
-                    if !images.isEmpty {
-                        if description != "" {
-                            if price != "" {
-                                if category != "" {
-                                    if zipcode != "" {
-                                        if title != "" {
-                                            count = 1
-                                            let post1 = UUID()
-                                            let post2 = UUID()
-                                            for x in images {
-                                                if let imageData = x.jpegData(compressionQuality: 0.25) {
-                                                    let storage = Storage.storage()
-                                                    storage.reference().child("\(wallet)/\(post1)/\(count)").putData(imageData, metadata: nil) { (_, err) in
-                                                        if err != nil {
-                                                            print("an error occurred")
-                                                            print(err ?? "")
-                                                        } else {
-                                                            print("image uploaded successfully")
+                            .frame(height: 20)
+                        })
+                    }
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .padding()
+                    //.cornerRadius(20)
+                    VStack {
+                        Text("Zipcode")
+                            .font(.system(size: 20))
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .frame(height: 20)
+                            .foregroundColor(.black)
+                        TextField("0", text: $zipcode)
+                            .font(.system(size: 20))
+                            .keyboardType(.numberPad)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .frame(maxWidth: .infinity, alignment: .center)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .padding()
+                    //.cornerRadius(20)
+                    Spacer()
+                        .frame(height: 10)
+                    Button(action: {
+                        if !images.isEmpty {
+                            if description != "" {
+                                if price != "" {
+                                    if category != "" {
+                                        if zipcode != "" {
+                                            if title != "" {
+                                                count = 1
+                                                let post1 = UUID()
+                                                let post2 = UUID()
+                                                for x in images {
+                                                    if let imageData = x.jpegData(compressionQuality: 0.25) {
+                                                        let storage = Storage.storage()
+                                                        storage.reference().child("\(wallet)/\(post1)/\(count)").putData(imageData, metadata: nil) { (_, err) in
+                                                            if err != nil {
+                                                                print("an error occurred")
+                                                                print(err ?? "")
+                                                            } else {
+                                                                print("image uploaded successfully")
+                                                            }
                                                         }
+                                                    } else {
+                                                        print("couldnt unwrap image to data")
                                                     }
-                                                } else {
-                                                    print("couldnt unwrap image to data")
+                                                    ref.child("\(wallet)/posts/\(post1)/title").setValue(title)
+                                                    ref.child("\(wallet)/posts/\(post1)/price").setValue(Int(price))
+                                                    ref.child("\(wallet)/posts/\(post1)/zipcode").setValue(Int(zipcode))
+                                                    ref.child("\(wallet)/posts/\(post1)/description").setValue(description)
+                                                    ref.child("\(wallet)/posts/\(post1)/image_\(count)").setValue("\(wallet)/\(post1)/\(count)")
+                                                    ref.child("\(wallet)/posts/\(post1)/image_count").setValue(count)
+                                                    ref.child("\(wallet)/posts/\(post1)/category").setValue(category)
+                                                    count += 1
                                                 }
-                                                ref.child("\(wallet)/posts/\(post1)/title").setValue(title)
-                                                ref.child("\(wallet)/posts/\(post1)/price").setValue(Int(price))
-                                                ref.child("\(wallet)/posts/\(post1)/zipcode").setValue(Int(zipcode))
-                                                ref.child("\(wallet)/posts/\(post1)/description").setValue(description)
-                                                ref.child("\(wallet)/posts/\(post1)/image_\(count)").setValue("\(wallet)/\(post1)/\(count)")
-                                                ref.child("\(wallet)/posts/\(post1)/image_count").setValue(count)
-                                                ref.child("\(wallet)/posts/\(post1)/category").setValue(category)
-                                                count += 1
+                                                ref.child("\(category)/\(zipcode)/\(post2)").setValue("\(wallet)/posts/\(post1)")
+                                                images.removeAll()
+                                                description = ""
+                                                price = ""
+                                                category = ""
+                                                title = ""
+                                                self.showingPhoto = false
                                             }
-                                            ref.child("\(category)/\(zipcode)/\(post2)").setValue("\(wallet)/posts/\(post1)")
-                                            images.removeAll()
-                                            description = ""
-                                            price = ""
-                                            category = ""
-                                            title = ""
-                                            self.showingPhoto = false
+                                            else {
+                                                print("title = ''")
+                                            }
                                         }
                                         else {
-                                            print("title = ''")
+                                            print("zipcode = ''")
                                         }
                                     }
                                     else {
-                                        print("zipcode = ''")
+                                        print("category = ''")
                                     }
                                 }
                                 else {
-                                    print("category = ''")
+                                    print("price = nil")
                                 }
                             }
                             else {
-                                print("price = nil")
+                                print("description = ''")
                             }
                         }
                         else {
-                            print("description = ''")
+                            print("images = empty")
                         }
-                    }
-                    else {
-                        print("images = empty")
-                    }
-                }, label: {
-                    Text("Post")
-                        .font(.system(size: 30))
-                        .frame(maxWidth: .infinity, alignment: .center)
-                        .frame(height: 20)
-                        .foregroundColor(.black)
-                })
-                .padding()
-                .font(.system(size: 20))
-                .background(Color(red: 255 / 255, green: 211 / 255, blue: 138 / 255))
-                .foregroundColor(.white)
-                //.cornerRadius(30)
-            }
-            .simultaneousGesture(
-                TapGesture()
-                    .onEnded { _ in
-                        UIApplication.shared.endEditing()
-                    }
-            )
-            .sheet(isPresented: $picker) {
-                ImagePicker(images: $images, picker: $picker)
-            }
-            .sheet(isPresented: $showingCategory) {
-                ScrollView{
-                    Spacer()
-                        .frame(height: 30)
-                    ForEach(categories, id: \.self) { cat in
-                        Button(action: {
-                            category = cat
-                                self.showingCategory.toggle()
-                        }, label: {
-                            Text(cat)
+                    }, label: {
+                        Neumorphic(name: "Post", width: 300)
+                            .padding()
+                    })
+                    //.cornerRadius(30)
+                }
+                .simultaneousGesture(
+                    TapGesture()
+                        .onEnded { _ in
+                            UIApplication.shared.endEditing()
+                        }
+                )
+                .sheet(isPresented: $picker) {
+                    ImagePicker(images: $images, picker: $picker)
+                }
+                .sheet(isPresented: $showingCategory) {
+                    ZStack {
+                        Color(red: 255 / 255, green: 220 / 255, blue: 159 / 255)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            .edgesIgnoringSafeArea(.all)
+                        ScrollView{
+                            Spacer()
+                                .frame(height: 30)
+                            ForEach(categories, id: \.self) { cat in
+                                Button(action: {
+                                    category = cat
+                                        self.showingCategory.toggle()
+                                }, label: {
+                                    Text(cat)
+                                        .font(.system(size: 20))
+                                        .frame(maxWidth: .infinity, alignment: .center)
+                                        .frame(height: 20)
+                                        .foregroundColor(.black)
+                                })
+                                .padding()
                                 .font(.system(size: 20))
-                                .frame(maxWidth: .infinity, alignment: .center)
-                                .frame(height: 20)
-                                .foregroundColor(.black)
-                        })
-                        .padding()
-                        .font(.system(size: 20))
-                        .background(Color(red: 255 / 255, green: 211 / 255, blue: 138 / 255))
-                        .foregroundColor(.white)
-                        //.cornerRadius(30)
+                                .background(Color(red: 255 / 255, green: 211 / 255, blue: 138 / 255))
+                                .foregroundColor(.white)
+                                //.cornerRadius(30)
+                            }
+                        }
                     }
                 }
             }

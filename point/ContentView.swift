@@ -32,12 +32,21 @@ struct ContentView: View {
         if wallet != "" {
             NavigationView {
                 TabView(selection: $tabSelection) {
-                    ExploreView()
+                    ZStack {
+                        Color(#colorLiteral(red: 0.992025435, green: 0.9831623435, blue: 0.8817279935, alpha: 1))
+                        ExploreView()
+                    }
+                    .ignoresSafeArea()
                     .tabItem {
                        Image(systemName: "safari")
                      }
                     .tag(Tabs.tab1)
-                    PostView()
+                    ZStack {
+                        Color(#colorLiteral(red: 0.992025435, green: 0.9831623435, blue: 0.8817279935, alpha: 1))
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            .edgesIgnoringSafeArea(.all)
+                        PostView()
+                    }
                     .navigationBarTitle("")
                     .navigationBarHidden(true)
                     .tabItem {
@@ -56,12 +65,16 @@ struct ContentView: View {
                        Image(systemName: "arrow.left.arrow.right")
                      }
                     .tag(Tabs.tab3)
-                    Text("messages")
+                    ZStack {
+                        Color(#colorLiteral(red: 0.992025435, green: 0.9831623435, blue: 0.8817279935, alpha: 1))
+                        Text("messages")
+                    }
+                    .ignoresSafeArea()
                     .tabItem {
                        Image(systemName: "message")
                      }
                     .tag(Tabs.tab4)
-                    Neumorphic()
+                    accountView()
                     .tabItem {
                        Image(systemName: "gearshape")
                      }
