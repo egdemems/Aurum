@@ -297,7 +297,7 @@ struct PostSubView: View {
                                     .fill(Color(red: 255 / 255, green: 211 / 255, blue: 138 / 255))
                                 .frame(width: 50, height: 50)
                                 Image(systemName: "chevron.left")
-                                    .foregroundColor(.white)
+                                    .foregroundColor(.black)
                             }
                             .padding(.leading, 20)
                             .padding(.top, 20)
@@ -310,7 +310,7 @@ struct PostSubView: View {
                                     .fill(Color(red: 255 / 255, green: 211 / 255, blue: 138 / 255))
                                 .frame(width: 50, height: 50)
                                 Image(systemName: "message")
-                                    .foregroundColor(.white)
+                                    .foregroundColor(.black)
                             }
                             .padding(.top, 20)
                             .padding(.trailing, 20)
@@ -331,7 +331,6 @@ struct PostSubView: View {
             VStack{
                 Spacer()
                 Button(action: {
-                        
                 accessToken()
                 if address == "" {
                     print("address = ''")
@@ -368,7 +367,7 @@ struct PostSubView: View {
                 }],
                  "application_context": {
                    "return_url": "https://google.com/",
-                   "cancel_url": "https://google.com/"
+                   "cancel_url": "https://github.com/"
                  }
                 }
                 """.data(using: .utf8) else
@@ -459,7 +458,10 @@ struct PostSubView: View {
                             }
                             
                         case .didStartProvisionalNavigation(let webView, let navigation):
-                            print("WebView -> \(String(describing: webView.url)) -> didStartProvisionalNavigation: \(navigation)")
+                            if String(describing: webView.url!.absoluteString).contains("github"){
+                                print("WebView -> \(String(describing: webView.url!.absoluteString)) -> didReceiveServerRedirectForProvisionalNavigation: \(navigation)")
+                                showUrl = false
+                            }
                         case .didReceiveServerRedirectForProvisionalNavigation(let webView, let navigation):
                             if String(describing: webView.url!.absoluteString).contains("google"){
                                 print("WebView -> \(String(describing: webView.url!.absoluteString)) -> didReceiveServerRedirectForProvisionalNavigation: \(navigation)")

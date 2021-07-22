@@ -142,7 +142,7 @@ struct Photo: View {
                                 .font(.system(size: 20))
                             TextField("0", text: $price)
                                 .font(.system(size: 20))
-                                .keyboardType(.numberPad)
+                                .keyboardType(.decimalPad)
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
                                 .frame(maxWidth: .infinity, alignment: .center)
                         }
