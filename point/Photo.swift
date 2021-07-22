@@ -132,16 +132,20 @@ struct Photo: View {
                     .padding()
                     //.cornerRadius(20)
                     VStack {
-                        Text("Points")
+                        Text("Price")
                             .font(.system(size: 20))
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .frame(height: 20)
                             .foregroundColor(.black)
-                        TextField("0", text: $price)
-                            .font(.system(size: 20))
-                            .keyboardType(.numberPad)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
-                            .frame(maxWidth: .infinity, alignment: .center)
+                        HStack {
+                            Text("$")
+                                .font(.system(size: 20))
+                            TextField("0", text: $price)
+                                .font(.system(size: 20))
+                                .keyboardType(.numberPad)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                                .frame(maxWidth: .infinity, alignment: .center)
+                        }
                     }
                     .frame(maxWidth: .infinity, alignment: .center)
                     .padding()

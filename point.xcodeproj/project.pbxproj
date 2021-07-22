@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -20,6 +20,7 @@
 		0871A699269D9F0F005E3594 /* imagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0871A698269D9F0F005E3594 /* imagePicker.swift */; };
 		0871A69B26A0F5F2005E3594 /* Neumorphic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0871A69A26A0F5F2005E3594 /* Neumorphic.swift */; };
 		0871A69D26A1369B005E3594 /* SingleImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0871A69C26A1369B005E3594 /* SingleImagePicker.swift */; };
+		08960A7B26AA1183006EB798 /* WKView in Frameworks */ = {isa = PBXBuildFile; productRef = 08960A7A26AA1183006EB798 /* WKView */; };
 		08F98583269407E600E767F2 /* loginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F98582269407E600E767F2 /* loginView.swift */; };
 		08F985852694082E00E767F2 /* signupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F985842694082E00E767F2 /* signupView.swift */; };
 		08F9858726940ACF00E767F2 /* accountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08F9858626940ACF00E767F2 /* accountView.swift */; };
@@ -56,6 +57,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				995CA9E5B1A90FC16BD4B9C5 /* Pods_point.framework in Frameworks */,
+				08960A7B26AA1183006EB798 /* WKView in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -147,6 +149,9 @@
 			dependencies = (
 			);
 			name = point;
+			packageProductDependencies = (
+				08960A7A26AA1183006EB798 /* WKView */,
+			);
 			productName = point;
 			productReference = 08711C00269101F4009890E1 /* point.app */;
 			productType = "com.apple.product-type.application";
@@ -174,6 +179,9 @@
 				Base,
 			);
 			mainGroup = 08711BF7269101F4009890E1;
+			packageReferences = (
+				08960A7926AA1183006EB798 /* XCRemoteSwiftPackageReference "WKView" */,
+			);
 			productRefGroup = 08711C01269101F4009890E1 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -446,6 +454,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		08960A7926AA1183006EB798 /* XCRemoteSwiftPackageReference "WKView" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/rebeloper/WKView.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.1.6;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		08960A7A26AA1183006EB798 /* WKView */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 08960A7926AA1183006EB798 /* XCRemoteSwiftPackageReference "WKView" */;
+			productName = WKView;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 08711BF8269101F4009890E1 /* Project object */;
 }
